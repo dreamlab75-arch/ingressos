@@ -1,0 +1,14 @@
+{
+    "name": "felipebastosvitt/ingressos",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Felipebastosvitt\\Ingressos\\": "src/"
+        }
+    },
+    "require": {
+        "mpdf/mpdf": "*",
+        "illuminate/validation": "^12.56",
+        "illuminate/translation": "^12.56"
+    }
+}
