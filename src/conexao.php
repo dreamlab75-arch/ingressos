@@ -53,3 +53,56 @@ function cadastrarFilmes($pdo){
     echo json_encode(["message" => "Filme cadastrado com sucesso!"]);
     //msg de sucesso
 }
+
+function deletarFilme($pdo){
+    $dados = json_decode(file_get_contents("php://input"), true);
+
+    if(empty($dados["imdb"])){
+        echo json_encode(["erro" => "Imdb do filme é obrigatório"]);
+        return;
+    }
+
+    $sql = "DELETE FROM filmes WHERE imdb = :imdb";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(":imdb", $dados["imdb"]);
+
+    $stmt->execute();
+
+    echo json_encode(["message" => "Filme deletado com sucesso!"]);
+}
+
+function atualizarFilme($pdo){
+
+    $dados = json_decode(file_get_contents("php://input"), true);
+
+    if (
+
+        empty($dados["imdb"]) ||
+        empty($dados["titulo"]) ||
+        empty($dados["genero"]) ||
+        empty($dados["duracao"]) ||
+        empty($dados["classificacao"])
+    ) {
+
+        echo json_encode(["erro" => "Dados incompletos"]);
+        return;
+    }
+
+    $sql = "UPDATE filmes SET titulo = :titulo, genero = :genero, duracao = :duracao, classificacao = :classificacao WHERE imdb = :imdb";
+
+    $stmt = $pdo->prepare($sql);
+
+    $stmt->bindValue(":imdb", $dados["imdb"]);
+    $stmt->bindValue(":titulo", $dados["titulo"]);
+    $stmt->bindValue(":genero", $dados["genero"]);
+    $stmt->bindValue(":duracao", $dados["duracao"]);
+    $stmt->bindValue(":classificacao", $dados["classificacao"]);
+
+    $stmt->execute();
+
+    echo json_encode(["message" => "Filme atualizado com sucesso!"]);
+
+}
+
+
