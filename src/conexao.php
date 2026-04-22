@@ -1,7 +1,7 @@
 <?php
 //Conexão com o banco de dados
 $host = "localhost";
-$db = "escola";
+$db = "filmes";
 $user = "root";
 $pass = "";
 
@@ -25,15 +25,18 @@ function cadastrarFilmes($pdo){
 
     //validação simples
     if (
-        empty($dados["filme"]) ||
+        empty($dados["imdb"]) ||
+        empty($dados["titulo"]) ||
         empty($dados["genero"]) ||
-        empty($dados["duracao"])
+        empty($dados["duracao"]) ||
+        empty($dados["classificacao"])
     ) {
         echo json_encode(["erro" => "Dados incompletos"]);
         return;
     }
 
     $sql = "INSERT INTO filmes (imdb, titulo, genero, duracao, classificacao) VALUES (:imdb, :titulo, :genero, :duracao, :classificacao)";
+    //comando do insert para o banco
 
     $stmt = $pdo->prepare($sql);
     //prepara o banco para receber o insert into
