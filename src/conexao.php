@@ -57,11 +57,6 @@ function cadastrarFilmes($pdo){
 function deletarFilme($pdo){
     $dados = json_decode(file_get_contents("php://input"), true);
 
-    if(empty($dados["imdb"])){
-        echo json_encode(["erro" => "Imdb do filme é obrigatório"]);
-        return;
-    }
-
     $sql = "DELETE FROM filmes WHERE imdb = :imdb";
 
     $stmt = $pdo->prepare($sql);
@@ -93,7 +88,6 @@ function atualizarFilme($pdo){
 
     $stmt = $pdo->prepare($sql);
 
-    $stmt->bindValue(":imdb", $dados["imdb"]);
     $stmt->bindValue(":titulo", $dados["titulo"]);
     $stmt->bindValue(":genero", $dados["genero"]);
     $stmt->bindValue(":duracao", $dados["duracao"]);
@@ -105,4 +99,6 @@ function atualizarFilme($pdo){
 
 }
 
+
+?>
 
