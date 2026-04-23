@@ -28,16 +28,15 @@ switch($metodo){
 );
         break;
     case "POST": //cadastra novo recurso
+        $input = json_decode(file_get_contents("php://input"), true);
         
-        $filme_um = new Filme(imdb: "tt28650488", titulo: "Super Mario Galaxy: O Filme", genero: array("Animação", "Aventura"), duracao: 98, classificacao: "Livre");
-
         $data = $validation-> validator(
         [
-            "imdb" => $filme_um->imdb,
-            "titulo" => $filme_um->titulo,
-            "genero" => $filme_um->genero,
-            "duracao" => $filme_um->duracao,
-            "classificacao" => $filme_um->classificacao
+            "imdb" => $input["imdb"] ?? "",
+            "titulo" => $input["titulo"] ?? "",
+            "genero" => $input["genero"] ?? [],
+            "duracao" => $input["duracao"] ?? 0,
+            "classificacao" => $input["classificacao"] ?? ""
         ], //dados
 
         [
@@ -61,11 +60,13 @@ switch($metodo){
 
     );
 
-    if($validation->fails()){
+    if($data->fails()){
         echo json_encode(["success"=>false,"message"=>errors()->all()]);
         http_response_code(400);
         exit;
     }
+
+    $filme_um = new Filme(imdb: $data["imdb"], titulo: $data["titulo"], genero: $data["genero"], duracao: $data["duracao"], classificacao: $data["classificacao"]);
 
     $controller->cadastrar($filme_um);
         
