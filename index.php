@@ -59,16 +59,20 @@ switch($metodo){
          "classificacao.string" => "O campo classificacao deve ser uma string."
         ], //mensagens de validação
 
-    )->validate();// vai passar e construir a validação, se tiver algum erro, ele vai lançar uma exceção, se nao tiver, ele vai retornar os dados validados
+    );
 
+    if($validation->fails()){
+        echo json_encode(["success"=>false,"message"=>errors()->all()]);
+        http_response_code(400);
+        exit;
+    }
 
-
-    echo json_encode(["success"=>true,"message"=>$data]);// tornar em formato json, fazer o array associativo, e mostrar a mensagem de sucesso ou erro, dependendo do resultado da validação
-
-        $controller->cadastrar($filme_um);
+    $controller->cadastrar($filme_um);
         
-        
-        http_response_code(201);
+    http_response_code(201);
+
+    echo json_encode(["success"=>true,"message"=>"Filme cadastrado com sucesso!"]);// tornar em formato json, fazer o array associativo, e mostrar a mensagem de sucesso ou erro, dependendo do resultado da validação
+
         break;
     case "PUT": //editar o recurso
         
